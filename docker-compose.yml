@@ -1,0 +1,64 @@
+name: minmod
+
+services:
+  kg:
+    image: minmod-fuseki
+    build:
+      context: ./containers/fuseki/
+      args:
+        UID: ${USER_ID}
+        GID: ${GROUP_ID}
+  etl:
+    image: minmod
+    build: 
+      context: .
+      dockerfile: containers/etl/Dockerfile
+      args:
+        UID: ${USER_ID}
+        GID: ${GROUP_ID}
+  nginx:
+    image: minmod-nginx
+    build:
+      context: ./containers/nginx/
+    volumes:
+      - ${CERT_DIR}:/certs/
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - minmod
+    cap_add:
+      - NET_BIND_SERVICE
+  api:
+    image: minmod
+    ports:
+      - "8000:8000"
+    networks:
+      - minmod
+    environment:
+      - CFG_FILE=/home/criticalmaas/config/config.yml
+    volumes:
+      - ${CFG_DIR}:/home/criticalmaas/config
+    command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
+  dashboard:
+    image: toan2/minmod-dashboard
+    ports:
+      - "8050:8050"
+    
+    networks:
+      - minmod
+    command: python ./app.py dev
+  editor:
+    image: darpa-criticalmaas/ta2-minmod-editor
+    ports:
+      - 9000:9000
+    networks:
+      - minmod
+    environment:
+      - MINMOD_API=http://api:8000
+    command: python -m minmod_editor --port 9000
+
+networks:
+  minmod:
+    name: minmod
+    external: true
