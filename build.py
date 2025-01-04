@@ -31,6 +31,11 @@ def update_repo(repo_name: str) -> bool:
             f"git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/{repo_name}.git",
             cwd=MAIN_DIR,
         )
+        if repo_name == "ta2-minmod-data":
+            exec(
+                f"git lfs fetch --all",
+                cwd=MAIN_DIR,
+            )
         return True
 
     # pull changes
@@ -185,6 +190,22 @@ def install_config(config_path: Path) -> bool:
     return False
 
 
+def build_kg():
+    minmod_kg_path = MAIN_DIR / "ta2-minmod-kg"
+    # install dependencies
+    exec("poetry env use 3.12 ", cwd=minmod_kg_path)
+    exec("python -m venv .venv", cwd=minmod_kg_path)
+    exec("poetry lock --no-update", cwd=minmod_kg_path)
+    exec("poetry install --only main", cwd=minmod_kg_path)
+
+    # activate venv and build
+    exec("source ta2-minmod-kg/.venv/bin/activate", cwd=MAIN_DIR)
+    exec(
+        "ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata ta2-minmod-data --overwrite-config --refresh 20",
+        cwd=MAIN_DIR,
+    )
+
+
 def export_env(file_path: Path):
 
     with open(file_path) as env_file:
@@ -239,6 +260,9 @@ def build():
 
     # export env to local env
     export_env(MAIN_DIR.parent / ".env")
+
+    # build kg
+    build_kg()
 
     # build the docker images
     build_repo(MAIN_DIR.parent)
