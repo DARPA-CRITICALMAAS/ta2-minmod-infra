@@ -200,6 +200,7 @@ def build_kg():
 
     # activate venv and build
     exec("source ta2-minmod-kg/.venv/bin/activate", cwd=MAIN_DIR)
+    exec("cp ./config/config.yml ./ta2-minmod-kg", cwd=MAIN_DIR)
     exec(
         "ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata ta2-minmod-data --overwrite-config --refresh 20",
         cwd=MAIN_DIR,
