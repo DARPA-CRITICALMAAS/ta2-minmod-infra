@@ -39,15 +39,21 @@ services:
       - CFG_FILE=/home/criticalmaas/config/config.yml
     volumes:
       - ${CFG_DIR}:/home/criticalmaas/config
-    command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
+    # command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
   dashboard:
+    build:
+      context: ./main/ta2-minmod-dashboard
+      dockerfile: ./Dockerfile
     image: toan2/minmod-dashboard
     ports:
       - "8050:8050"
-    
+    environment: 
+      - API_ENDPOINT=${API_ENDPOINT}
+      - SPARQL_ENDPOINT=${SPARQL_ENDPOINT}
     networks:
       - minmod
-    command: python ./app.py dev
+    command: "poetry run python app.py"
+    
   editor:
     image: darpa-criticalmaas/ta2-minmod-editor
     ports:

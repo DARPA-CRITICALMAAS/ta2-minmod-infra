@@ -1,4 +1,17 @@
-import subprocess
+from build import exec, MAIN_DIR
+from pathlib import Path
 
-# setup start services
-subprocess.run("docker compose -f ./ta2-minmod-kg/docker-compose.yml up nginx api")
+
+def update_services(repo_dir: Path):
+    exec(
+        "docker compose -f ./docker-compose.yml up dashboard nginx",
+        cwd=repo_dir,
+    )
+
+
+def main():
+    update_services(MAIN_DIR.parent)
+
+
+if __name__ == "__main__":
+    main()
