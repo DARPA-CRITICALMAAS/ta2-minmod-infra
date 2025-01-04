@@ -11,6 +11,8 @@ MAIN_DIR.mkdir(exist_ok=True, parents=True)
 REPOS = [
     "ta2-minmod-dashboard",
     "ta2-minmod-kg",
+    "ta2-minmod-data",
+    "ta2-minmod-editor",
 ]
 
 
@@ -58,8 +60,8 @@ def read_env_vars(envfile_path: Path) -> list[str]:
                 for line in file
                 if "=" in line
             ]
-    else:
-        raise MissingEnvTemplateFileError("No env template file present!")
+    # else:
+    #     raise MissingEnvTemplateFileError("No env template file present!")
 
     return env_vars
 
@@ -138,6 +140,63 @@ def create_or_add_comments(
         file.writelines(processed_lines)
 
 
+def install_certs(certs_path: Path) -> bool:
+    certs_path.mkdir(exist_ok=True, parents=True)
+
+    if not any(certs_path.iterdir()):
+        # install certificates
+        exec(
+            'openssl req -x509 -newkey rsa:4096 -keyout privkey.pem -out fullchain.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=CommonNameOrHostname"',
+            cwd=certs_path,
+        )
+        return True
+
+    return False
+
+
+def install_config(config_path: Path) -> bool:
+    config_path.mkdir(exist_ok=True, parents=True)
+
+    if not any(config_path.iterdir()):
+        config_template_path = (
+            config_path.parent / "ta2-minmod-kg" / "config.yml.template"
+        )
+
+        processed_lines = []
+
+        with open(config_template_path, "r") as file:
+            lines = file.readlines()
+
+        for line in lines:
+            if line.startswith("#"):
+                processed_lines.append(
+                    "# update the below secret key with : openssl rand -hex 32"
+                )
+            elif line.startswith("secret_key"):
+                processed_lines.append("\nsecret_key:")
+            else:
+                processed_lines.append(line)
+
+        with open(config_path / "config.yml", "w") as file:
+            file.writelines(processed_lines)
+
+        return True
+
+    return False
+
+
+def export_env(file_path: Path):
+
+    with open(file_path) as env_file:
+        for line in env_file:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                key, _, value = line.partition("=")
+                os.environ[key.strip()] = value.strip().strip('"')
+
+    print(f"Environment variables from {file_path} have been exported.")
+
+
 def validate_envfile(envfile_path: Path):
 
     with open(envfile_path, "r") as file:
@@ -154,7 +213,7 @@ def validate_envfile(envfile_path: Path):
 
 
 def build_repo(repo_dir: Path):
-    exec("docker compose build dashboard nginx api", cwd=repo_dir)
+    exec("docker compose build", cwd=repo_dir)
 
 
 def build():
@@ -168,22 +227,22 @@ def build():
     certs = MAIN_DIR / "certs"
 
     kgdata.mkdir(exist_ok=True, parents=True)
-    config.mkdir(exist_ok=True, parents=True)
-    certs.mkdir(exist_ok=True, parents=True)
+    install_certs(certs)
+    install_config(config)
 
     # setup env variables
     process_env_file(MAIN_DIR.parent)
 
     # Validate envfile
     validate_envfile(MAIN_DIR.parent / ".env")
+    validate_envfile(MAIN_DIR / "config" / "config.yml")
+
+    # export env to local env
+    export_env(MAIN_DIR.parent / ".env")
 
     # build the docker images
     build_repo(MAIN_DIR.parent)
 
 
-def main():
-    build()
-
-
 if __name__ == "__main__":
-    main()
+    build()

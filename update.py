@@ -4,7 +4,7 @@ from pathlib import Path
 
 def update_services(repo_dir: Path):
     exec(
-        "docker compose -f ./docker-compose.yml up dashboard nginx",
+        "docker compose -f ./docker-compose.yml up",
         cwd=repo_dir,
     )
 
