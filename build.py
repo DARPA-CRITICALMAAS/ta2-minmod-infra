@@ -26,7 +26,7 @@ def exec(cmd: str, cwd: Path = MAIN_DIR):
     except subprocess.CalledProcessError as e:
         # Raised if the command fails
         raise RuntimeError(
-            f"Command failed with exit code {e.returncode}: {cmd} at path : {cwd}"
+            f"Command failed with exit code {e.returncode}: command {cmd} at path : {cwd}"
         )
 
 
