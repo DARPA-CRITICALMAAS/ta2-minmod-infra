@@ -16,9 +16,15 @@ REPOS = [
 
 
 def exec(cmd: str, cwd: Path = MAIN_DIR):
-    subprocess.check_call(
-        cmd, cwd=str(cwd), shell=True, env={"PATH": os.environ["PATH"]}
-    )
+    try:
+        subprocess.check_call(
+            cmd, cwd=str(cwd), shell=True, env={"PATH": os.environ["PATH"]}
+        )
+    except subprocess.CalledProcessError as e:
+        # Raised if the command fails
+        raise RuntimeError(
+            f"Command failed with exit code {e.returncode}: {cmd} at path : {cwd}"
+        )
 
 
 def update_repo(repo_name: str) -> bool:
