@@ -7,7 +7,6 @@ MAIN_DIR = Path(__file__).parent / "main"
 MAIN_DIR.mkdir(exist_ok=True, parents=True)
 
 
-# REPOS = ["ta2-minmod-dashboard", kg, kd - data, editor]
 REPOS = [
     "ta2-minmod-dashboard",
     "ta2-minmod-kg",
@@ -33,14 +32,34 @@ def update_repo(repo_name: str) -> bool:
         )
         if repo_name == "ta2-minmod-data":
             exec(
-                f"git lfs fetch --all",
-                cwd=MAIN_DIR,
+                f"git lfs fetch --all ",
+                cwd=MAIN_DIR / "ta2-minmod-data",
+            )
+            exec(
+                f"git lfs pull",
+                cwd=MAIN_DIR / "ta2-minmod-data",
             )
         return True
 
     # pull changes
     try:
-        exec("git pull", cwd=repo_dir)
+        if repo_name == "ta2-minmod-data":
+            exec(
+                f"git lfs install",
+                cwd=MAIN_DIR / "ta2-minmod-data",
+            )
+            exec(
+                f"git lfs fetch --all ",
+                cwd=MAIN_DIR / "ta2-minmod-data",
+            )
+            exec(
+                f"git lfs pull",
+                cwd=MAIN_DIR / "ta2-minmod-data",
+            )
+        else:
+            exec("git fetch --all", cwd=repo_dir)
+            exec("git pull", cwd=repo_dir)
+
         return True  # Repository updated
     except subprocess.CalledProcessError as e:
         print(f"Error during 'git pull': {e}")
@@ -190,23 +209,6 @@ def install_config(config_path: Path) -> bool:
     return False
 
 
-def build_kg():
-    minmod_kg_path = MAIN_DIR / "ta2-minmod-kg"
-    # install dependencies
-    exec("poetry env use 3.12 ", cwd=minmod_kg_path)
-    exec("python -m venv .venv", cwd=minmod_kg_path)
-    exec("poetry lock --no-update", cwd=minmod_kg_path)
-    exec("poetry install --only main", cwd=minmod_kg_path)
-
-    # activate venv and build
-    exec("source ta2-minmod-kg/.venv/bin/activate", cwd=MAIN_DIR)
-    exec("cp ./config/config.yml ./ta2-minmod-kg", cwd=MAIN_DIR)
-    exec(
-        "ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata ta2-minmod-data --overwrite-config --refresh 20",
-        cwd=MAIN_DIR,
-    )
-
-
 def export_env(file_path: Path):
 
     with open(file_path) as env_file:
@@ -261,9 +263,6 @@ def build():
 
     # export env to local env
     export_env(MAIN_DIR.parent / ".env")
-
-    # build kg
-    build_kg()
 
     # build the docker images
     build_repo(MAIN_DIR.parent)
