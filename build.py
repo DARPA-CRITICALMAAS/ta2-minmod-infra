@@ -18,7 +18,10 @@ REPOS = [
 def exec(cmd: str, cwd: Path = MAIN_DIR):
     try:
         subprocess.check_call(
-            cmd, cwd=str(cwd), shell=True, env={"PATH": os.environ["PATH"]}
+            cmd,
+            cwd=str(cwd),
+            shell=True,
+            env={"PATH": os.environ["PATH"], "HOME": str(Path.home())},
         )
     except subprocess.CalledProcessError as e:
         # Raised if the command fails
@@ -38,6 +41,10 @@ def update_repo(repo_name: str) -> bool:
         )
         if repo_name == "ta2-minmod-data":
             exec(
+                "git lfs install --force",
+                cwd=MAIN_DIR / "ta2-minmod-data",
+            )
+            exec(
                 f"git lfs fetch --all ",
                 cwd=MAIN_DIR / "ta2-minmod-data",
             )
@@ -51,7 +58,7 @@ def update_repo(repo_name: str) -> bool:
     try:
         if repo_name == "ta2-minmod-data":
             exec(
-                f"git lfs install",
+                "git lfs install --force",
                 cwd=MAIN_DIR / "ta2-minmod-data",
             )
             exec(
