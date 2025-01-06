@@ -302,7 +302,7 @@ def build():
     kgdata.mkdir(exist_ok=True, parents=True)
     install_certs(certs)
     install_config(config)
-    install_build_dependencies(MAIN_DIR)
+    install_build_dependencies(MAIN_DIR.parent)
 
     # setup env variables
     process_env_file(MAIN_DIR.parent)
