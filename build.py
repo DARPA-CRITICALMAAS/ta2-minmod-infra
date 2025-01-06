@@ -34,6 +34,24 @@ def exec(cmd: str, cwd: Path = MAIN_DIR):
         )
 
 
+def exec_output(cmd: str, cwd: Path = MAIN_DIR):
+    try:
+        result = subprocess.check_output(
+            cmd,
+            cwd=str(cwd),
+            shell=True,
+            text=True,
+            env={"PATH": os.environ["PATH"], "HOME": str(Path.home())},
+        )
+
+        return result
+    except subprocess.CalledProcessError as e:
+        # Raised if the command fails
+        raise RuntimeError(
+            f"Command failed with exit code {e.returncode}: command {cmd} at path : {cwd}"
+        )
+
+
 def update_repo(repo_name: str) -> bool:
     repo_dir = MAIN_DIR / repo_name
 
@@ -254,8 +272,17 @@ def validate_envfile(envfile_path: Path):
 
 
 def build_repo(repo_dir: Path):
-    exec("docker network create minmod", cwd=repo_dir)
-    exec("docker compose build", cwd=repo_dir)
+    network_ls = exec_output(
+        f"docker network ls --filter name=minmod --format '{{{{.Name}}}}'", cwd=repo_dir
+    )
+    existing_networks = network_ls.strip().splitlines()
+    if "minmod" not in existing_networks:
+        exec("docker network create minmod", cwd=repo_dir)
+    for repo in REPOS:
+        repo_path = repo_dir / repo
+        if (repo_path / "docker-compose.yml").is_file():
+            print("Building repository", repo)
+            exec("docker compose --env-file ../.env build")
 
 
 def build():
@@ -283,7 +310,7 @@ def build():
     export_env(MAIN_DIR.parent / ".env")
 
     # build the docker images
-    build_repo(MAIN_DIR.parent)
+    build_repo(MAIN_DIR)
 
 
 if __name__ == "__main__":
