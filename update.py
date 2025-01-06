@@ -5,7 +5,6 @@ from pathlib import Path
 def build_kg():
     minmod_kg_path = MAIN_DIR / "ta2-minmod-kg"
     # install dependencies
-    exec("poetry env use 3.12 ", cwd=minmod_kg_path)
     exec("python -m venv .venv", cwd=minmod_kg_path)
     exec("poetry lock --no-update", cwd=minmod_kg_path)
     exec("poetry install --only main", cwd=minmod_kg_path)
