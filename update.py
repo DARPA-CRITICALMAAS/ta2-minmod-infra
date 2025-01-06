@@ -7,7 +7,7 @@ def build_kg():
     minmod_kg_path = MAIN_DIR / "ta2-minmod-kg"
     # install dependencies
     exec(f"{sys.executable} -m venv .venv", cwd=minmod_kg_path)
-    exec("poetry lock --no-update", cwd=minmod_kg_path)
+    exec("poetry lock", cwd=minmod_kg_path)
     exec("poetry install --only main", cwd=minmod_kg_path)
 
     # activate venv and build
