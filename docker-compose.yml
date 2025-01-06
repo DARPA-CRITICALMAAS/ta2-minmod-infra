@@ -1,0 +1,92 @@
+name: minmod
+
+services:
+  kg:
+    image: minmod-fuseki
+    build:
+      context: ./containers/fuseki/
+      args:
+        - UID=${USER_ID}
+        - GID=${GROUP_ID}
+        - MEMORY=${JVM_MEM}
+  kg-virtuoso:
+    image: minmod-virtuoso
+    build:
+      context: ./containers/virtuoso/
+      args:
+        - UID=${USER_ID}
+        - GID=${GROUP_ID}
+  kg-blazegraph:
+    image: minmod-blazegraph
+    build:
+      context: ./containers/blazegraph
+      args:
+        - UID=${USER_ID}
+        - GID=${GROUP_ID}
+        - MEMORY=${JVM_MEM}
+  kg-postgres:
+    image: minmod-postgres
+    build:
+      context: ./containers/postgres/
+  etl:
+    image: minmod
+    build:
+      context: ./main/ta2-minmod-kg
+      dockerfile: containers/etl/Dockerfile
+      args:
+        - UID=${USER_ID}
+        - GID=${GROUP_ID}
+  nginx:
+    image: minmod-nginx
+    build:
+      context: ./containers/nginx/
+    volumes:
+      - ${CERT_DIR}:/certs/
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - minmod
+    cap_add:
+      - NET_BIND_SERVICE
+  api:
+    image: minmod
+    ports:
+      - "8000:8000"
+    networks:
+      - minmod
+    environment:
+      - CFG_FILE=/home/criticalmaas/config/config.yml
+    volumes:
+      - ${CFG_DIR}:/home/criticalmaas/config
+    command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
+  dashboard:
+    build:
+      context: ./main/ta2-minmod-dashboard
+      dockerfile: ./Dockerfile
+    image: toan2/minmod-dashboard
+    ports:
+      - "8050:8050"
+    environment: 
+      - API_ENDPOINT=${API_ENDPOINT}
+      - SPARQL_ENDPOINT=${SPARQL_ENDPOINT}
+    networks:
+      - minmod
+    command: "poetry run python app.py"
+  editor:
+    image: darpa-criticalmaas/ta2-minmod-editor
+    build:
+      context: ./main/ta2-minmod-editor
+      dockerfile: Dockerfile
+    ports:
+      - 9000:9000
+    networks:
+      - minmod
+    environment:
+      - MINMOD_API=http://api:8000
+    command: python -m minmod_editor --port 9000
+
+networks:
+  minmod:
+    name: minmod
+    external: true
