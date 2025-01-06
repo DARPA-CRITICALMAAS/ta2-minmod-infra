@@ -250,6 +250,7 @@ def validate_envfile(envfile_path: Path):
 
 
 def build_repo(repo_dir: Path):
+    exec("docker create network minmod", cwd=repo_dir)
     exec("docker compose build", cwd=repo_dir)
 
 
