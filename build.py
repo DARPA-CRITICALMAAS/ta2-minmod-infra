@@ -213,6 +213,10 @@ def install_certs(certs_path: Path) -> bool:
     return False
 
 
+def install_build_dependencies(install_path: Path):
+    exec("pip install -r requirements.txt", cwd=install_path)
+
+
 def install_config(config_path: Path) -> bool:
     config_path.mkdir(exist_ok=True, parents=True)
 
@@ -298,6 +302,7 @@ def build():
     kgdata.mkdir(exist_ok=True, parents=True)
     install_certs(certs)
     install_config(config)
+    install_build_dependencies(MAIN_DIR)
 
     # setup env variables
     process_env_file(MAIN_DIR.parent)
