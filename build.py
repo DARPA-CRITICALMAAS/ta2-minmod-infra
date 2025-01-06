@@ -1,6 +1,10 @@
 from __future__ import annotations
-import subprocess, os, sys
+
+import os
+import subprocess
+import sys
 from pathlib import Path
+
 from exceptions import EnvFileValidationError, MissingEnvTemplateFileError
 
 MAIN_DIR = Path(__file__).parent / "main"
@@ -250,7 +254,7 @@ def validate_envfile(envfile_path: Path):
 
 
 def build_repo(repo_dir: Path):
-    exec("docker create network minmod", cwd=repo_dir)
+    exec("docker network create minmod", cwd=repo_dir)
     exec("docker compose build", cwd=repo_dir)
 
 
