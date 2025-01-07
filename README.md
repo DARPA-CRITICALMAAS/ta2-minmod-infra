@@ -77,11 +77,18 @@ docker compose up -d nginx api dashboard editor
 To clean up the databases, run the following command:
 
 ```bash
+docker container rm -f $(docker container ls -aq --filter ancestor=minmod-fuseki)
+docker container rm -f $(docker container ls -aq --filter ancestor=minmod-postgres)
 rm -r main/kgdata/databases
+
 ```
 
 To clean up the databases and all cache, run the following command:
 
 ```bash
+docker container rm -f $(docker container ls -aq --filter ancestor=minmod-fuseki)
+docker container rm -f $(docker container ls -aq --filter ancestor=minmod-postgres)
 rm -r main/kgdata
 ```
+
+After the services are started, you can access the services with your host IP address.
