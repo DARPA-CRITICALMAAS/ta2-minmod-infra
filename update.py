@@ -7,8 +7,9 @@ from build import MAIN_DIR, exec
 
 def build_kg(test: bool = False):
     data_repo = "ta2-minmod-data" if not test else "ta2-minmod-data-sample"
+    data_dir = "./kgdata" if not test else "./kgdata-sample"
     exec(
-        f"ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata {data_repo} --overwrite-config --no-loop",
+        f"ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml {data_dir} {data_repo} --overwrite-config --no-loop",
         cwd=MAIN_DIR,
         env={
             "CFG_FILE": str(MAIN_DIR / "config/config.yml"),
