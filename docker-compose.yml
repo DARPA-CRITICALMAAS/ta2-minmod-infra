@@ -1,41 +1,20 @@
 name: minmod
 
 services:
-  kg:
-    image: minmod-fuseki
-    build:
-      context: ./containers/fuseki/
-      args:
-        - UID=${USER_ID}
-        - GID=${GROUP_ID}
-        - MEMORY=${JVM_MEM}
-  kg-virtuoso:
-    image: minmod-virtuoso
-    build:
-      context: ./containers/virtuoso/
-      args:
-        - UID=${USER_ID}
-        - GID=${GROUP_ID}
-  kg-blazegraph:
-    image: minmod-blazegraph
-    build:
-      context: ./containers/blazegraph
-      args:
-        - UID=${USER_ID}
-        - GID=${GROUP_ID}
-        - MEMORY=${JVM_MEM}
-  kg-postgres:
-    image: minmod-postgres
-    build:
-      context: ./containers/postgres/
+  # kg:
+  #   image: minmod-fuseki
+  #   build:
+  #     context: ./containers/fuseki/
+  #     args:
+  #       - UID=${USER_ID}
+  #       - GID=${GROUP_ID}
+  #       - MEMORY=${JVM_MEM}
+  # kg-postgres:
+  #   image: minmod-postgres
+  #   build:
+  #     context: ./containers/postgres/
   etl:
     image: minmod
-    build:
-      context: ./main/ta2-minmod-kg
-      dockerfile: containers/etl/Dockerfile
-      args:
-        - UID=${USER_ID}
-        - GID=${GROUP_ID}
   nginx:
     image: minmod-nginx
     build:
