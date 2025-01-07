@@ -15,6 +15,7 @@ REPOS = [
     "ta2-minmod-dashboard",
     "ta2-minmod-kg",
     "ta2-minmod-data",
+    "ta2-minmod-data-sample",
     "ta2-minmod-editor",
 ]
 
@@ -57,10 +58,16 @@ def update_repo(repo_name: str) -> bool:
 
     # Clone the repo if it does not exist
     if not repo_dir.exists():
-        exec(
-            f"git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/{repo_name}.git",
-            cwd=MAIN_DIR,
-        )
+        if repo_name == "ta2-minmod-data-sample":
+            exec(
+                f"git clone --depth 1 https://github.com/binh-vu/{repo_name}.git",
+                cwd=MAIN_DIR,
+            )
+        else:
+            exec(
+                f"git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/{repo_name}.git",
+                cwd=MAIN_DIR,
+            )
         if repo_name == "ta2-minmod-data":
             exec(
                 "git lfs install --force",

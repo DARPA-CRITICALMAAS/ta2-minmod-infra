@@ -59,3 +59,29 @@ alias python=python3.11
 ```
 
 ## Deployment
+
+First, we need to run the building KG command
+
+```bash
+python build-kg.py [--test]
+```
+
+If the `--test` flag is provided, the script will build the KG on a small dataset for testing. Otherwise, it will build the KG with the full dataset.
+
+After that, we can start the services by running the following command:
+
+```bash
+docker compose up -d nginx api dashboard editor
+```
+
+To clean up the databases, run the following command:
+
+```bash
+rm -r main/kgdata/databases
+```
+
+To clean up the databases and all cache, run the following command:
+
+```bash
+rm -r main/kgdata
+```
