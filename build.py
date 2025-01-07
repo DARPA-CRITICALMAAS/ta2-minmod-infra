@@ -288,6 +288,14 @@ def build_repo(repo_dir: Path):
             print("Building repository", repo)
             exec("docker compose --env-file ../.env build")
 
+        if repo == "ta2-minmod-kg":
+            # install dependencies
+            repo_path = repo_dir / repo
+            if not (repo_path / ".venv").exists():
+                exec(f"{sys.executable} -m venv .venv", cwd=repo_path)
+            exec("poetry lock", cwd=repo_path)
+            exec("poetry install --only main", cwd=repo_path)
+
 
 def build():
     is_updated = {}

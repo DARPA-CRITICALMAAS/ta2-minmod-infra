@@ -1,6 +1,7 @@
 import sys
-from build import exec, MAIN_DIR
 from pathlib import Path
+
+from build import MAIN_DIR, exec
 
 
 def build_kg():

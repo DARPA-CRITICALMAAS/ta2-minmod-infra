@@ -57,3 +57,5 @@ chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
 alias python=python3.11
 ```
+
+## Deployment
