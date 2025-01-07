@@ -4,6 +4,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Optional
 
 from exceptions import EnvFileValidationError, MissingEnvTemplateFileError
 
@@ -20,13 +21,17 @@ REPOS = [
 ]
 
 
-def exec(cmd: str, cwd: Path = MAIN_DIR):
+def exec(cmd: str, cwd: Path = MAIN_DIR, env: Optional[dict] = None):
+    exec_env = {"PATH": os.environ["PATH"], "HOME": str(Path.home())}
+    if env is not None:
+        exec_env.update(env)
+
     try:
         subprocess.check_call(
             cmd,
             cwd=str(cwd),
             shell=True,
-            env={"PATH": os.environ["PATH"], "HOME": str(Path.home())},
+            env=exec_env,
         )
     except subprocess.CalledProcessError as e:
         # Raised if the command fails

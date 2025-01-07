@@ -63,7 +63,7 @@ alias python=python3.11
 First, we need to run the building KG command
 
 ```bash
-python build-kg.py [--test]
+python update.py [--test]
 ```
 
 If the `--test` flag is provided, the script will build the KG on a small dataset for testing. Otherwise, it will build the KG with the full dataset.

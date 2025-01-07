@@ -1,38 +1,28 @@
+import argparse
 import sys
 from pathlib import Path
 
 from build import MAIN_DIR, exec
 
 
-def build_kg():
-    minmod_kg_path = MAIN_DIR / "ta2-minmod-kg"
-    # install dependencies
-    exec(f"{sys.executable} -m venv .venv", cwd=minmod_kg_path)
-    exec("poetry lock", cwd=minmod_kg_path)
-    exec("poetry install --only main", cwd=minmod_kg_path)
-
-    # activate venv and build
-    exec("source ta2-minmod-kg/.venv/bin/activate", cwd=MAIN_DIR)
-    exec("cp ./config/config.yml ./ta2-minmod-kg", cwd=MAIN_DIR)
+def build_kg(test: bool = False):
+    data_repo = "ta2-minmod-data" if not test else "ta2-minmod-data-sample"
     exec(
-        "ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata ta2-minmod-data --overwrite-config --refresh 20",
+        f"ta2-minmod-kg/.venv/bin/python -m statickg ta2-minmod-kg/etl.yml ./kgdata {data_repo} --overwrite-config --no-loop",
         cwd=MAIN_DIR,
+        env={
+            "CFG_FILE": str(MAIN_DIR / "config/config.yml"),
+        },
     )
-
-
-def update_services(repo_dir: Path):
-    exec(
-        "docker compose -f ./docker-compose.yml up -d",
-        cwd=repo_dir,
-    )
-
-
-def main():
-    # update and run services
-    update_services(MAIN_DIR.parent)
-    # build kg
-    build_kg()
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--test", action="store_true", help="Run the script in test mode."
+    )
+
+    # Parse the command-line arguments
+    args = parser.parse_args()
+    build_kg(args.test)
