@@ -122,7 +122,7 @@ def update_repo(repo_name: str) -> bool:
 
 def read_env_vars(envfile_path: Path) -> list[str]:
 
-    env_vars = {}
+    env_vars = []
 
     if envfile_path.exists():
         with open(envfile_path, "r") as file:
@@ -298,7 +298,7 @@ def build_repo(repo_dir: Path):
         repo_path = repo_dir / repo
         if (repo_path / "docker-compose.yml").is_file():
             print("Building repository", repo)
-            exec("docker compose --env-file ../.env build")
+            exec("docker compose --env-file ../.env build", cwd=repo_path)
 
         if repo == "ta2-minmod-kg":
             # install dependencies
