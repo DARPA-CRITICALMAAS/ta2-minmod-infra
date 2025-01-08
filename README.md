@@ -20,7 +20,7 @@ To setup the infrastructure, run the following commands (reqired Python >=3.11, 
 git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/ta2-minmod-infra.git
 cd ta2-minmod-infra
 pip install -r requirements.txt
-python build.py
+python -m mms.build
 ```
 
 Everytime the build script is run, it will check if the environment variables (specified in [./.env](/.env) file) and the configuration file (specified in [./config.yml](./config.yml)) have correct values. If not, the script will inform the users to update the values in the files. For the first time setp, you need to update the secret key in the [./config.yml](./config.yml) file as instructed in the file. The [./.env](/.env) comes with the default values copied from [./.env.template](./.env.template), but you can update them as needed.
@@ -55,7 +55,7 @@ Note: you need to open ports 80 and 443 to allow access to MinMod.
 First, we need to run the building KG command
 
 ```bash
-python update.py [--test]
+python -m mms.update [--test]
 ```
 
 If the `--test` flag is provided, the script will build the KG on a small dataset for testing. Otherwise, it will build the KG with the full dataset.
