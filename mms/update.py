@@ -19,8 +19,10 @@ def build_kg(test: bool = False):
         # run the build kg script inside docker, temporary add the user to the root
         # group so that the docker client can access to the socket to start other containers
         f"docker run --rm -it --group-add {docker_group_id} -v /var/run/docker.sock:/var/run/docker.sock",
-        # mount the output directory to the container
-        f"-v {data_dir}:/home/criticalmaas/build/kgdata",
+        # mount the output directory to the container -- it's important to use the same
+        # host path as the container path because the script will later use this path to
+        # call another container.
+        f"-v {data_dir}:{data_dir}",
         # mount the input repository to the container
         f"-v {data_repo}:/home/criticalmaas/build/data",
         # mount the configuration file to the container
@@ -34,7 +36,7 @@ def build_kg(test: bool = False):
         # run the build kg script in the backend
         "minmod-backend",
         # we need to tell git inside the container that this repo is safe, then run the script
-        "sh -c 'git config --global --add safe.directory /data && python -m statickg /home/criticalmaas/kg/etl.yml /home/criticalmaas/build/kgdata /home/criticalmaas/build/data --overwrite-config --no-loop'",
+        f"sh -c 'git config --global --add safe.directory /data && python -m statickg /home/criticalmaas/kg/etl.yml {data_dir} /home/criticalmaas/build/data --overwrite-config --no-loop'",
     ]
     exec(
         " ".join(command),
