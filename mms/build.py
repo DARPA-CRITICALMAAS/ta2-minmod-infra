@@ -7,12 +7,13 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from exceptions import EnvFileValidationError, MissingEnvTemplateFileError
+from mms.exceptions import EnvFileValidationError, MissingEnvTemplateFileError
 
 ROOT_DIR = Path(__file__).parent
 MAIN_DIR = ROOT_DIR / "main"
 MAIN_DIR.mkdir(exist_ok=True, parents=True)
 
+CFG_FILE = ROOT_DIR / "config.yml"
 
 REPOS = [
     "ta2-minmod-dashboard",
@@ -229,10 +230,6 @@ def install_certs(certs_path: Path) -> bool:
     return False
 
 
-def install_build_dependencies(install_path: Path):
-    exec(f"{sys.executable} -m pip install -r requirements.txt", cwd=install_path)
-
-
 def install_config(config_file: Path) -> bool:
     if not config_file.exists():
         config_template_path = MAIN_DIR / "ta2-minmod-kg" / "config.yml.template"
@@ -300,13 +297,13 @@ def build_repo(repo_dir: Path):
             print("Building repository", repo)
             exec("docker compose --env-file ../../.env build", cwd=repo_path)
 
-        if repo == "ta2-minmod-kg":
-            # install dependencies
-            repo_path = repo_dir / repo
-            if not (repo_path / ".venv").exists():
-                exec(f"{sys.executable} -m venv .venv", cwd=repo_path)
-            exec("poetry lock", cwd=repo_path)
-            exec("poetry install --only main", cwd=repo_path)
+        # if repo == "ta2-minmod-kg":
+        #     # install dependencies
+        #     repo_path = repo_dir / repo
+        #     if not (repo_path / ".venv").exists():
+        #         exec(f"{sys.executable} -m venv .venv", cwd=repo_path)
+        #     exec("poetry lock", cwd=repo_path)
+        #     exec("poetry install --only main", cwd=repo_path)
 
 
 def build():
@@ -319,8 +316,7 @@ def build():
     kgdata.mkdir(exist_ok=True, parents=True)
 
     install_certs(ROOT_DIR / "certs")
-    install_config(ROOT_DIR / "config.yml")
-    # install_build_dependencies(ROOT_DIR)
+    install_config(CFG_FILE)
 
     # setup, validate, and export env variables
     if not (ROOT_DIR / ".env").exists():

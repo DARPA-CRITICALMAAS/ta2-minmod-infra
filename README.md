@@ -7,6 +7,8 @@ Code to help deploy TA2 KG and HMI
 - [containers](/containers): scripts to build nginx docker image
 - [main](/main): contains the configuration and code for individual services
 - [build.py](/build.py): script to update the repo and build the docker images
+- [.env](/.env): environment variables needed for the services
+- [config.yml](/config.yml): configuration file for the services
 
 ## Installation
 
