@@ -63,7 +63,13 @@ If the `--test` flag is provided, the script will build the KG on a small datase
 After that, we can start the services by running the following command:
 
 ```bash
-docker compose up -d nginx api dashboard editor
+docker compose up -d nginx backend editor
+```
+
+Then, (we will fix this later)
+
+```bash
+docker compose up -d dashboard
 ```
 
 To clean up the databases, run the following command:
