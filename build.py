@@ -144,6 +144,8 @@ def process_env_file(env_dir: Path):
 
     for repo in REPOS:
         envfile_path = MAIN_DIR / repo / "env.template"
+        if not envfile_path.exists():
+            envfile_path = MAIN_DIR / repo / ".env.template"
         all_envs.update(read_env_vars(envfile_path))
 
     envfile_path = env_dir / ".env"

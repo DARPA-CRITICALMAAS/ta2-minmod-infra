@@ -23,7 +23,7 @@ python build.py
 
 Everytime the build script is run, it will check if the environment variables (specified in [./.env](/.env) file) and the configuration file (specified in [./config.yml](./config.yml)) have correct values. If not, the script will inform the users to update the values in the files. For the first time setp, you need to update the secret key in the [./config.yml](./config.yml) file as instructed in the file. The [./.env](/.env) comes with the default values copied from [./.env.template](./.env.template), but you can update them as needed.
 
-Note that the build script also creates a certs directory for storing the SSL certificates and generates a self-signed certificate for the services. You can replace the self-signed certificate with your own certificate.
+Note that the build script also creates a [./certs](./certs) directory for storing the SSL certificates and generates a self-signed certificate for the services. You can replace the self-signed certificate with your own certificate.
 
 ### EC2 Quick Start
 
