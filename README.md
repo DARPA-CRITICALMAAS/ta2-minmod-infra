@@ -19,7 +19,7 @@ To setup the infrastructure, run the following commands (reqired Python >=3.11, 
 ```bash
 git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/ta2-minmod-infra.git
 cd ta2-minmod-infra
-pip install -r requirements.txt
+python -m pip install -e .
 python -m mms.build
 ```
 
