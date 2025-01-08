@@ -9,7 +9,7 @@ from typing import Optional
 
 from mms.exceptions import EnvFileValidationError, MissingEnvTemplateFileError
 
-ROOT_DIR = Path(__file__).parent
+ROOT_DIR = Path(__file__).parent.parent
 MAIN_DIR = ROOT_DIR / "main"
 MAIN_DIR.mkdir(exist_ok=True, parents=True)
 
