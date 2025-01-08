@@ -12,7 +12,7 @@ def build_kg(test: bool = False):
         # group so that the docker client can access to the socket to start other containers
         f"docker run --rm -it --group-add $(id -g root) -v /var/run/docker.sock:/var/run/docker.sock",
         # mount the output directory to the container
-        f"-v {data_dir}:/kgdata"
+        f"-v {data_dir}:/kgdata",
         # mount the input repository to the container
         f"-v {data_repo}:/data",
         # mount the configuration file to the container
