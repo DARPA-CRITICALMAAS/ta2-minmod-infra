@@ -8,11 +8,11 @@ def build_kg(test: bool = False):
     data_dir = MAIN_DIR / ("kgdata" if not test else "kgdata-sample")
     data_dir.mkdir(exist_ok=True, parents=True)
 
-    docker_group = exec_output("getend group docker").strip()
+    docker_group = exec_output("getent group docker").strip()
     if docker_group == "":
         # this is typically on a mac, they have root group -- since we fire a local process and stop
         # there should be no problem with security
-        docker_group = exec_output("getend group root").strip()
+        docker_group = exec_output("getent group root").strip()
     docker_group_id = docker_group.split(":")[2]
 
     command = [
