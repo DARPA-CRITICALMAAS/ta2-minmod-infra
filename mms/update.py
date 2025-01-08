@@ -1,6 +1,6 @@
 import argparse
 
-from mms.build import CFG_FILE, MAIN_DIR, exec
+from mms.build import CFG_FILE, MAIN_DIR, exec, exec_output
 
 
 def build_kg(test: bool = False):
@@ -8,10 +8,17 @@ def build_kg(test: bool = False):
     data_dir = MAIN_DIR / ("kgdata" if not test else "kgdata-sample")
     data_dir.mkdir(exist_ok=True, parents=True)
 
+    docker_group = exec_output("getend group docker").strip()
+    if docker_group == "":
+        # this is typically on a mac, they have root group -- since we fire a local process and stop
+        # there should be no problem with security
+        docker_group = exec_output("getend group root").strip()
+    docker_group_id = docker_group.split(":")[2]
+
     command = [
         # run the build kg script inside docker, temporary add the user to the root
         # group so that the docker client can access to the socket to start other containers
-        f"docker run --rm -it --group-add $(id -g root) -v /var/run/docker.sock:/var/run/docker.sock",
+        f"docker run --rm -it --group-add {docker_group_id} -v /var/run/docker.sock:/var/run/docker.sock",
         # mount the output directory to the container
         f"-v {data_dir}:/kgdata",
         # mount the input repository to the container

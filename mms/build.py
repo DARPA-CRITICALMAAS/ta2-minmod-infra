@@ -57,9 +57,10 @@ def exec_output(cmd: str, cwd: Path = MAIN_DIR):
         return result
     except subprocess.CalledProcessError as e:
         # Raised if the command fails
-        raise RuntimeError(
+        print(
             f"Command failed with exit code {e.returncode}: command {cmd} at path : {cwd}"
         )
+        raise
 
 
 def update_repo(repo_name: str) -> bool:
