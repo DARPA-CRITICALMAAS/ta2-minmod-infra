@@ -323,7 +323,7 @@ def build():
         shutil.copy(ROOT_DIR / ".env.template", ROOT_DIR / ".env")
     process_env_file(ROOT_DIR)
     validate_envfile(ROOT_DIR / ".env")
-    validate_envfile(MAIN_DIR / "config" / "config.yml")
+    validate_envfile(MAIN_DIR / "config.yml")
     export_env(ROOT_DIR / ".env")
 
     # build the docker images
