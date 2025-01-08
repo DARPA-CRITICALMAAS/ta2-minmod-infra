@@ -22,10 +22,8 @@ def build_kg(test: bool = False):
         f"-v {MAIN_DIR}/ta2-minmod-kg/etl.yml:/home/criticalmaas/config/etl.yml",
         # run the build kg script in the backend
         "minmod-backend",
-        # we need to tell git inside the container that this repo is safe
-        "git config --global --add safe.directory /data &&",
-        # command to run the build script
-        "python -m statickg /home/criticalmaas/config/etl.yml /kgdata /data --overwrite-config --no-loop",
+        # we need to tell git inside the container that this repo is safe, then run the script
+        "sh -c 'git config --global --add safe.directory /data && python -m statickg /home/criticalmaas/config/etl.yml /kgdata /data --overwrite-config --no-loop'",
     ]
     exec(
         " ".join(command),
