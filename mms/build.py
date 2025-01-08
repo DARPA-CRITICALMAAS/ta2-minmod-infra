@@ -40,7 +40,7 @@ def exec(cmd: str, cwd: Path = MAIN_DIR, env: Optional[dict] = None):
         # Raised if the command fails
         raise RuntimeError(
             f"Command failed with exit code {e.returncode}: command {cmd} at path : {cwd}"
-        )
+        ) from e
 
 
 def exec_output(cmd: str, cwd: Path = MAIN_DIR):
