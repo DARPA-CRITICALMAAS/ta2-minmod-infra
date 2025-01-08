@@ -28,8 +28,9 @@ def build_kg(test: bool = False):
         "-e CFG_FILE=/home/criticalmaas/config/config.yml",
         # mount the etl configuration file to the container
         f"-v {MAIN_DIR}/ta2-minmod-kg/etl.yml:/home/criticalmaas/kg/etl.yml",
-        # need to be in the same network to communicate with the databases
-        f"--network=minmod",
+        # need to use the host network to make networking similar to running outside of
+        # docker
+        f"--network=host",
         # run the build kg script in the backend
         "minmod-backend",
         # we need to tell git inside the container that this repo is safe, then run the script
