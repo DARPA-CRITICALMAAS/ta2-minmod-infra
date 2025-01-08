@@ -6,6 +6,7 @@ from mms.build import CFG_FILE, MAIN_DIR, exec
 def build_kg(test: bool = False):
     data_repo = MAIN_DIR / ("ta2-minmod-data" if not test else "ta2-minmod-data-sample")
     data_dir = MAIN_DIR / ("kgdata" if not test else "kgdata-sample")
+    data_dir.mkdir(exist_ok=True, parents=True)
 
     command = [
         # run the build kg script inside docker, temporary add the user to the root
