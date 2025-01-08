@@ -214,7 +214,7 @@ def create_or_add_comments(
 def install_certs(certs_path: Path) -> bool:
     certs_path.mkdir(exist_ok=True, parents=True)
 
-    if not any(certs_path.iterdir()):
+    if not (certs_path / "fullchain.pem").exists():
         # install certificates
         exec(
             'openssl req -x509 -newkey rsa:4096 -keyout privkey.pem -out fullchain.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=CommonNameOrHostname"',

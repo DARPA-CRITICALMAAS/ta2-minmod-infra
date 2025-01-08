@@ -15,7 +15,7 @@ Code to help deploy TA2 KG and HMI
 To setup the infrastructure, run the following commands (reqired Python >=3.11, Git & Git LFS):
 
 ```bash
-git clone -depth 1 https://github.com/DARPA-CRITICALMAAS/ta2-minmod-infra.git
+git clone --depth 1 https://github.com/DARPA-CRITICALMAAS/ta2-minmod-infra.git
 cd ta2-minmod-infra
 pip install -r requirements.txt
 python build.py
@@ -57,6 +57,8 @@ chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
 alias python=python3.11
 ```
+
+Note: you need to open ports 80 and 443 to allow access to MinMod.
 
 ## Deployment
 
