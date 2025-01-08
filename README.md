@@ -63,7 +63,7 @@ If the `--test` flag is provided, the script will build the KG on a small datase
 After that, we can start the services by running the following command:
 
 ```bash
-docker compose up -d nginx backend editor
+docker compose up -d nginx api editor
 ```
 
 Then, (we will fix this later)
