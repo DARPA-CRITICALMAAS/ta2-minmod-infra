@@ -16,7 +16,7 @@ def build_kg(test: bool = False):
         # mount the input repository to the container
         f"-v {data_repo}:/data",
         # mount the configuration file to the container
-        f"-v {CFG_FILE}:/home/criticalmaas/config/config.yml"
+        f"-v {CFG_FILE}:/home/criticalmaas/config/config.yml",
         "-e CFG_FILE=/home/criticalmaas/config/config.yml",
         # mount the etl configuration file to the container
         f"-v {MAIN_DIR}/ta2-minmod-kg/etl.yml:/home/criticalmaas/config/etl.yml",
