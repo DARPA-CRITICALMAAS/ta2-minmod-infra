@@ -21,21 +21,9 @@ pip install -r requirements.txt
 python build.py
 ```
 
-For the first time, the command will stop and ask users to update the values for environment variables in the newly created [.env](/.env) file and other required configuration such as [main/config/config.yml](/main/config/config.yml). After that, the script will build the docker images and start the services.
+Everytime the build script is run, it will check if the environment variables (specified in [./.env](/.env) file) and the configuration file (specified in [./config.yml](./config.yml)) have correct values. If not, the script will inform the users to update the values in the files. For the first time setp, you need to update the secret key in the [./config.yml](./config.yml) file as instructed in the file. The [./.env](/.env) comes with the default values copied from [./.env.template](./.env.template), but you can update them as needed.
 
-Example for [.env](/.env) file:
-
-```bash
-JVM_MEM=6G
-USER_ID=1000
-GROUP_ID=1000
-CFG_DIR=./main/config
-API_ENDPOINT=http://api:8000
-SPARQL_ENDPOINT=http://kg:3030/minmod/sparql
-CERT_DIR=./main/config
-```
-
-For the [main/config/config.yml](/main/config/config.yml) file, you need to update a secret key as instructed in the file.
+Note that the build script also creates a certs directory for storing the SSL certificates and generates a self-signed certificate for the services. You can replace the self-signed certificate with your own certificate.
 
 ### EC2 Quick Start
 

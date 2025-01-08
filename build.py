@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -8,7 +9,8 @@ from typing import Optional
 
 from exceptions import EnvFileValidationError, MissingEnvTemplateFileError
 
-MAIN_DIR = Path(__file__).parent / "main"
+ROOT_DIR = Path(__file__).parent
+MAIN_DIR = ROOT_DIR / "main"
 MAIN_DIR.mkdir(exist_ok=True, parents=True)
 
 
@@ -181,7 +183,7 @@ def process_env_file(env_dir: Path):
 
 
 def create_or_add_comments(
-    envfile_path: Path, update_envs: set, delete_envs: set = None
+    envfile_path: Path, update_envs: set, delete_envs: Optional[set] = None
 ):
 
     processed_lines = []
@@ -229,13 +231,9 @@ def install_build_dependencies(install_path: Path):
     exec(f"{sys.executable} -m pip install -r requirements.txt", cwd=install_path)
 
 
-def install_config(config_path: Path) -> bool:
-    config_path.mkdir(exist_ok=True, parents=True)
-
-    if not any(config_path.iterdir()):
-        config_template_path = (
-            config_path.parent / "ta2-minmod-kg" / "config.yml.template"
-        )
+def install_config(config_file: Path) -> bool:
+    if not config_file.exists():
+        config_template_path = MAIN_DIR / "ta2-minmod-kg" / "config.yml.template"
 
         processed_lines = []
 
@@ -252,7 +250,7 @@ def install_config(config_path: Path) -> bool:
             else:
                 processed_lines.append(line)
 
-        with open(config_path / "config.yml", "w") as file:
+        with open(config_file, "w") as file:
             file.writelines(processed_lines)
 
         return True
@@ -316,23 +314,19 @@ def build():
 
     # setup the other directories.
     kgdata = MAIN_DIR / "kgdata"
-    config = MAIN_DIR / "config"
-    certs = MAIN_DIR / "certs"
-
     kgdata.mkdir(exist_ok=True, parents=True)
-    install_certs(certs)
-    install_config(config)
-    install_build_dependencies(MAIN_DIR.parent)
 
-    # setup env variables
-    process_env_file(MAIN_DIR.parent)
+    install_certs(ROOT_DIR / "certs")
+    install_config(ROOT_DIR / "config.yml")
+    # install_build_dependencies(ROOT_DIR)
 
-    # Validate envfile
-    validate_envfile(MAIN_DIR.parent / ".env")
+    # setup, validate, and export env variables
+    if not (ROOT_DIR / ".env").exists():
+        shutil.copy(ROOT_DIR / ".env.template", ROOT_DIR / ".env")
+    process_env_file(ROOT_DIR)
+    validate_envfile(ROOT_DIR / ".env")
     validate_envfile(MAIN_DIR / "config" / "config.yml")
-
-    # export env to local env
-    export_env(MAIN_DIR.parent / ".env")
+    export_env(ROOT_DIR / ".env")
 
     # build the docker images
     build_repo(MAIN_DIR)
