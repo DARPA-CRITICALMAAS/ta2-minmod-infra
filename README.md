@@ -90,3 +90,7 @@ rm -r main/kgdata
 ```
 
 After the services are started, you can access the services with your host IP address.
+
+## Admin
+
+We provide [APIs](https://minmod.isi.edu/api/v1/docs#/admin) to list the users and create users (need admin access). We also provide commands to create/delete users from files (no need permission -- see [ta2-minmod-kg/minmodkg/api/**main**.py](https://github.com/DARPA-CRITICALMAAS/ta2-minmod-kg/blob/main/minmodkg/api/__main__.py)). One way to execute these commands is to attach to the `api` container (e.g., `docker compose exec -it api bash`) and run them there.
