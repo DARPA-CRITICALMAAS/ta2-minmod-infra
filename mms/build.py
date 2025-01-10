@@ -165,14 +165,13 @@ def process_env_file(env_dir: Path):
         delete_envs = current_envs - all_envs
 
         # add_comments
-        if not update_envs or not delete_envs:
+        if update_envs or delete_envs:
             create_or_add_comments(envfile_path, update_envs, delete_envs)
 
-            if update_envs or delete_envs:
-                print(
-                    "Found missing envs in .env file, please update and delete the comments"
-                )
-                return
+            print(
+                "Found missing envs in .env file, please update and delete the comments"
+            )
+            return
 
         # log
         print("Env file processed : No Changes")
