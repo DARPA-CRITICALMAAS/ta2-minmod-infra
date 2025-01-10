@@ -330,6 +330,7 @@ def build():
 
     # build the docker images
     build_repo(MAIN_DIR)
+    exec("docker compose --env-file .env build", cwd=ROOT_DIR)
 
 
 if __name__ == "__main__":
