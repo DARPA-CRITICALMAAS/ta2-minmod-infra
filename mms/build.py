@@ -168,16 +168,11 @@ def process_env_file(env_dir: Path):
         if not update_envs or not delete_envs:
             create_or_add_comments(envfile_path, update_envs, delete_envs)
 
-            # log
-            print(
-                "Found missing envs in .env file, please update and remove the comments"
-            )
-
-            if update_envs:
-                print(update_envs)
-
-            if delete_envs:
-                print(delete_envs)
+            if update_envs or delete_envs:
+                print(
+                    "Found missing envs in .env file, please update and delete the comments"
+                )
+                return
 
         # log
         print("Env file processed : No Changes")
@@ -208,7 +203,7 @@ def create_or_add_comments(
             if stripped_line and not stripped_line.startswith("#"):
                 key = stripped_line.split("=")[0].strip()
                 if delete_envs and key in delete_envs:
-                    processed_lines.append(f"#delete variable\n{line}")
+                    processed_lines.append(f"\n#delete variable\n{line}")
                 else:
                     processed_lines.append(line)
             else:
@@ -217,7 +212,7 @@ def create_or_add_comments(
     # Add new variables in update_envs at the end
     if update_envs:
         for update_var in update_envs:
-            processed_lines.append(f"#update variable :\n{update_var}=\n")
+            processed_lines.append(f"\n#update variable :\n{update_var}=\n")
 
     # Write back to the .env file
     with open(envfile_path, "w") as file:
