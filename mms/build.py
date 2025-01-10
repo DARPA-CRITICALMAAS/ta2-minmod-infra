@@ -173,6 +173,12 @@ def process_env_file(env_dir: Path):
                 "Found missing envs in .env file, please update and remove the comments"
             )
 
+            if update_envs:
+                print(update_envs)
+
+            if delete_envs:
+                print(delete_envs)
+
         # log
         print("Env file processed : No Changes")
 
