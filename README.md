@@ -49,6 +49,7 @@ curl -SL https://github.com/docker/compose/releases/download/v2.32.0/docker-comp
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 
 alias python=python3.11
+echo 'alias python=python3.11' >> ~/.bashrc
 ```
 
 Note: you need to open ports 80 and 443 to allow access to MinMod.
