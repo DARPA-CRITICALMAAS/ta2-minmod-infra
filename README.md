@@ -40,6 +40,7 @@ sudo dnf install -y htop git git-lfs python3.11 python3.11-pip
 sudo dnf install -y docker
 sudo usermod -a -G docker ec2-user
 sudo service docker start
+newgrp docker
 
 # install docker compose
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
