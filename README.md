@@ -29,6 +29,8 @@ Everytime the build script is run, it will check if the environment variables (s
 
 Note that the build script also creates a [./certs](./certs) directory for storing the SSL certificates and generates a self-signed certificate for the services. You can replace the self-signed certificate with your own certificate.
 
+In order to back up data to the designated repository ([./main/ta2-minmod-data](./main/ta2-minmod-data) or [./main/ta2-minmod-data-sample](./main/ta2-minmod-data-sample)), you have to setup an Git account with push permission.
+
 ### EC2 Quick Start
 
 For EC2 start fresh from the Amazon Linux image, you can run the following commands to setup Python3.11 and docker:
@@ -67,7 +69,13 @@ If the `--test` flag is provided, the script will build the KG on a small datase
 After that, we can start the services by running the following command:
 
 ```bash
-docker compose up -d nginx api editor
+docker compose up -d nginx api editor api_sync
+```
+
+If you are testing the system, use `api_sync_test` instead:
+
+```bash
+docker compose up -d nginx api editor api_sync_test
 ```
 
 Then, (we will fix this later)

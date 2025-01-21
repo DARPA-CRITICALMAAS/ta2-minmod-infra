@@ -27,6 +27,20 @@ services:
         source: ${CFG_FILE}
         target: /home/criticalmaas/config/config.yml
     command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
+  api_sync:
+    image: minmod-backend
+    volumes:
+      - type: bind
+        source: main/ta2-minmod-data
+        target: /home/criticalmaas/ta2-minmod-data
+    command: python -m minmodkg.services.sync /home/criticalmaas/ta2-minmod-data --backup-interval 3600
+  api_sync_test:
+    image: minmod-backend
+    volumes:
+      - type: bind
+        source: main/ta2-minmod-data-sample
+        target: /home/criticalmaas/ta2-minmod-data-sample
+    command: python -m minmodkg.services.sync /home/criticalmaas/ta2-minmod-data-sample --backup-interval 30
   dashboard:
     image: minmod-dashboard
     ports:
