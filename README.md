@@ -78,6 +78,8 @@ If you are testing the system, use `api_sync_test` instead:
 docker compose up -d nginx api editor api_sync_test; sleep 10; docker compose up -d dashboard
 ```
 
+Note that `api_sync` will back up the data to the github repository. You can create an access token and change the remote of the repository to include the access token with the following format: `https://<access_token>@<repository_url>`.
+
 To clean up the databases, run the following command:
 
 ```bash
