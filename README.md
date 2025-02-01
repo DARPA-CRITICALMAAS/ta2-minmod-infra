@@ -69,7 +69,7 @@ If the `--test` flag is provided, the script will build the KG on a small datase
 After that, we can start the services by running the following command:
 
 ```bash
-docker compose up -d nginx api editor api_sync; sleep 10; docker compose up -d dashboard
+docker compose up -d nginx api editor api_sync api_cdr_sync; sleep 10; docker compose up -d dashboard
 ```
 
 If you are testing the system, use `api_sync_test` instead:
