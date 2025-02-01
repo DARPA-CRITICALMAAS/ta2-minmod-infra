@@ -31,6 +31,8 @@ services:
     image: minmod-backend
     environment:
       - CFG_FILE=/home/criticalmaas/config/config.yml
+    networks:
+      - minmod
     volumes:
       - type: bind
         source: main/ta2-minmod-data
@@ -43,6 +45,8 @@ services:
     image: minmod-backend
     environment:
       - CFG_FILE=/home/criticalmaas/config/config.yml
+    networks:
+      - minmod
     volumes:
       - type: bind
         source: ${CFG_FILE}
@@ -52,6 +56,8 @@ services:
     image: minmod-backend
     environment:
       - CFG_FILE=/home/criticalmaas/config/config.yml
+    networks:
+      - minmod
     volumes:
       - type: bind
         source: main/ta2-minmod-data-sample
