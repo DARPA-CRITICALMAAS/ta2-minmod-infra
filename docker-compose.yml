@@ -29,6 +29,8 @@ services:
     command: fastapi run /home/criticalmaas/kg/minmodkg/api/main.py
   api_sync:
     image: minmod-backend
+    environment:
+      - CFG_FILE=/home/criticalmaas/config/config.yml
     volumes:
       - type: bind
         source: main/ta2-minmod-data
@@ -39,6 +41,8 @@ services:
     command: python -m minmodkg.services.sync /home/criticalmaas/ta2-minmod-data --backup-interval 3600 --verbose true
   api_cdr_sync:
     image: minmod-backend
+    environment:
+      - CFG_FILE=/home/criticalmaas/config/config.yml
     volumes:
       - type: bind
         source: ${CFG_FILE}
