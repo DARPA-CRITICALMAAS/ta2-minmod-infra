@@ -38,7 +38,7 @@ services:
       - type: bind
         source: ${CFG_FILE}
         target: /home/criticalmaas/config/config.yml
-    command: python -m minmodkg.services.sync /home/criticalmaas/ta2-minmod-data --backup-interval 3600 --verbose true
+    command: python -m minmodkg.services.sync /home/criticalmaas/ta2-minmod-data --backup-interval 3600 --verbose
   api_cdr_sync:
     image: minmod-backend
     environment:
@@ -47,7 +47,7 @@ services:
       - type: bind
         source: ${CFG_FILE}
         target: /home/criticalmaas/config/config.yml
-    command: python -m minmodkg.integrations.cdr --verbose true
+    command: python -m minmodkg.integrations.cdr --verbose
   api_sync_test:
     image: minmod-backend
     environment:
