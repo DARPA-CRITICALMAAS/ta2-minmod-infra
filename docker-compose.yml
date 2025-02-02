@@ -45,6 +45,7 @@ services:
     image: minmod-backend
     environment:
       - CFG_FILE=/home/criticalmaas/config/config.yml
+      - CDR_AUTH_TOKEN=${CDR_AUTH_TOKEN}
     networks:
       - minmod
     volumes:
