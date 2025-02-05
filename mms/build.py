@@ -310,8 +310,8 @@ def build():
         is_updated[repo] = update_repo(repo)
 
     # setup the other directories.
-    kgdata = MAIN_DIR / "kgdata"
-    kgdata.mkdir(exist_ok=True, parents=True)
+    (MAIN_DIR / "kgdata").mkdir(exist_ok=True, parents=True)
+    (MAIN_DIR / "kgdata" / "cdr").mkdir(exist_ok=True, parents=True)
 
     install_certs(ROOT_DIR / "certs")
     install_config(CFG_FILE)
