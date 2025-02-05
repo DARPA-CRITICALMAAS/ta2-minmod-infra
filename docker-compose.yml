@@ -53,7 +53,7 @@ services:
       - type: bind
         source: ${CFG_FILE}
         target: /home/criticalmaas/config/config.yml
-    command: python -m minmodkg.integrations.cdr --verbose
+    command: python -m minmodkg.integrations.cdr --run-on-start --run-dir /home/criticalmaas/cdr --verbose
   api_sync_test:
     image: minmod-backend
     environment:
