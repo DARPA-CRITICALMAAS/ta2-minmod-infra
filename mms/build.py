@@ -84,7 +84,7 @@ def update_repo(repo_name: str) -> bool:
                 cwd=MAIN_DIR / "ta2-minmod-data",
             )
             exec(
-                f"git lfs fetch --all ",
+                f"git lfs fetch --all",
                 cwd=MAIN_DIR / "ta2-minmod-data",
             )
             exec(
@@ -97,11 +97,7 @@ def update_repo(repo_name: str) -> bool:
     try:
         if repo_name == "ta2-minmod-data":
             exec(
-                "git lfs install --force",
-                cwd=MAIN_DIR / "ta2-minmod-data",
-            )
-            exec(
-                f"git lfs fetch --all ",
+                f"git lfs fetch --all",
                 cwd=MAIN_DIR / "ta2-minmod-data",
             )
             exec(
