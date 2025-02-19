@@ -47,6 +47,7 @@ services:
       - CFG_FILE=/home/criticalmaas/config/config.yml
       - CDR_AUTH_TOKEN=${CDR_AUTH_TOKEN}
       - MINMOD_API=http://api:8000/api/v1
+      - CDR_API=https://api.cdr.land/v1
     networks:
       - minmod
     volumes:

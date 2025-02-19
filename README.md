@@ -56,6 +56,10 @@ echo 'alias python=python3.11' >> ~/.bashrc
 
 Note: you need to open ports 80 and 443 to allow access to MinMod.
 
+## Configuration
+
+To change CDR endpoint, update the `CDR_API` environment variable in the [docker-compose.yml](./docker-compose.yml) file.
+
 ## Deployment
 
 First, we need to run the building KG command
