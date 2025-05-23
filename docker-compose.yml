@@ -17,7 +17,7 @@ services:
   api:
     image: minmod-backend
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     networks:
       - minmod
     environment:
@@ -75,7 +75,7 @@ services:
   dashboard:
     image: minmod-dashboard
     ports:
-      - "8050:8050"
+      - "127.0.0.1:8050:8050"
     environment: 
       - API_ENDPOINT=${API_ENDPOINT:-http://api:8000/api/v1}
       - SPARQL_ENDPOINT=${SPARQL_ENDPOINT:-http://kg:3030/minmod/sparql}
@@ -85,7 +85,7 @@ services:
   editor:
     image: minmod-editor
     ports:
-      - 9000:9000
+      - "127.0.0.1:9000:9000"
     networks:
       - minmod
     environment:
